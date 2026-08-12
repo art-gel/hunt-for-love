@@ -1,17 +1,3 @@
-// Sweet Memory — a grid of tiles flashes a few candies, then goes
-// blank. Click every tile that had a candy, from memory, within the
-// time limit. 3 rounds, each harder than the last (more tiles to
-// remember). Complete all 3 to win; a wrong click or running out of
-// time on any round loses immediately. Calls finishRound(true/false).
-//
-// CANDY_TYPES has an `image` field per candy — currently null, so it
-// falls back to an emoji placeholder. Once you upload your 3 candy
-// drawings, set each one's `image` to its file path (e.g.
-// "pictures/candy1.png") and the tile will render that instead —
-// no other changes needed. Which specific candy lands on which tile
-// each round is random and doesn't affect scoring — only the
-// position matters, so any candy type is equally "correct" as long
-// as it's in the right spot.
 
 const MATRIX_GRID_SIZE = 5; // 5x5 = 25 tiles
 const MATRIX_SELECT_TIME_LIMIT = 15; // seconds to make your selections, per round
@@ -31,9 +17,9 @@ CANDY_TYPES.forEach((c) => {
 });
 
 const MATRIX_ROUNDS = [
-    { highlightCount: 4, memorizeMs: 2500 },
-    { highlightCount: 8, memorizeMs: 2200 },
-    { highlightCount: 11, memorizeMs: 2000 }
+    { highlightCount: 4, memorizeMs: 3000 },
+    { highlightCount: 8, memorizeMs: 4000 },
+    { highlightCount: 11, memorizeMs: 4000 }
 ];
 
 let matrixState = {
@@ -205,7 +191,7 @@ function endMatrixGame(isWin){
         return;
     }
 
-    finishRound(true, 5);
+    finishRound(true, 4);
 
 }
 

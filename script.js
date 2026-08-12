@@ -62,7 +62,7 @@ const challenges = [
     {
         id: "jinxed",
         title: "Jinxed <img src=\"icons/smiling-face-with-horns.svg\" class=\"title-icon\">",
-        rules: "Match all the things Angel doesn't like before the timer runs out!"
+        rules: "Match all the things that Angel doesn't like before the timer runs out!"
     },
     {
         id: "matrix",
