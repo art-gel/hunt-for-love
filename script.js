@@ -55,9 +55,14 @@ const challenges = [
         rules: "Stop the timer as close to 10.00s as you can, the second round runs faster."
     },
     {
-        id: "matchGame",
-        title: "Match Up <img src=\"icons/performing-arts.svg\" class=\"title-icon\">",
-    
+        id: "perfectMatch",
+        title: "Perfect Match <img src=\"icons/smiling-face-with-halo.svg\" class=\"title-icon\">",
+        rules: "Match every pair of Angel's's favorite things before the timer runs out!"
+    },
+    {
+        id: "jinxed",
+        title: "Jinxed <img src=\"icons/smiling-face-with-horns.svg\" class=\"title-icon\">",
+        rules: "Match all the things Angel doesn't like before the timer runs out!"
     },
     {
         id: "matrix",
@@ -248,13 +253,14 @@ function flipCard(card){
 // under /games) that actually starts that game's gameplay.
 const GAME_STARTERS = {
     stopTheClock: () => startStopTheClockGame(),
-    matchGame: () => startMatchGame(),
     matrix: () => startMatrixGame(),
     password: () => startPasswordGame(),
     findHeart: () => startFindHeartGame(),
     colorDodge: () => startColorDodgeGame(),
     chainReaction: () => startChainReactionGame(),
-    wordSearch: () => startWordSearchGame()
+    wordSearch: () => startWordSearchGame(),
+    perfectMatch: () => startPerfectMatchGame(),
+    jinxed: () => startJinxedGame()
 };
 
 function startChallenge(event, challengeId){
@@ -266,15 +272,11 @@ function startChallenge(event, challengeId){
     const challenge = challenges.find((c) => c.id === challengeId);
     if (!challenge) return;
 
-    const rulesText = (challengeId === "matchGame" && typeof getMatchUpRulesText === "function")
-        ? getMatchUpRulesText()
-        : challenge.rules;
-
     document.getElementById("game").innerHTML = `
 
         <h1>How to Play</h1>
 
-        <p>${rulesText}</p>
+        <p>${challenge.rules}</p>
 
         <button onclick="beginGame('${challengeId}')">
             I'm ready

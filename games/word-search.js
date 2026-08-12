@@ -14,12 +14,10 @@ const WORD_SEARCH_CATEGORIES = [
     { name: "Body Parts", words: ["EYE", "EAR", "NOSE", "MOUTH", "HAND", "FOOT", "LEG"] },
     { name: "Weather", words: ["SUN", "RAIN", "SNOW", "WIND", "CLOUD", "STORM", "FOG"] },
     { name: "Drinks", words: ["WATER", "COFFEE", "TEA", "JUICE", "SODA", "MILK", "WINE"] },
-    { name: "Emotions", words: ["HAPPY", "SAD", "ANGRY", "EXCITED", "NERVOUS", "CALM", "SURPRISED"] },
     { name: "Countries", words: ["USA", "CANADA", "FRANCE", "GERMANY", "JAPAN", "BRAZIL", "INDIA"] },
     { name: "Furniture", words: ["TABLE", "CHAIR", "SOFA", "BED", "DESK", "CABINET", "SHELF"] },
     { name: "Clothing", words: ["SHIRT", "PANTS", "DRESS", "HAT", "SHOES", "JACKET", "SOCKS"] },
     { name: "Harry Potter", words: ["HARRY", "RON", "HERMIONE", "DUMBLEDORE", "SNAPE", "HAGRID", "OWL"] },
-    { name: "Sports", words: ["SOCCER", "BASKETBALL", "TENNIS", "BASEBALL", "SWIMMING", "GOLF", "SWIMMING"] }
 ];  
 
 const WORD_SEARCH_DIRECTIONS = [
@@ -263,7 +261,7 @@ function endWordSearch(){
 
     if (foundEverything) {
         // nothing left unfound to reveal — go straight to the result
-        finishRound(isWin, 2);
+        finishRound(isWin, 3);
         return;
     }
 

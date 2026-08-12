@@ -293,9 +293,20 @@ button {
 
     background: rgba(255, 255, 255, 0.406);
     box-shadow: 0 6px 16px rgba(61, 57, 57, 0.12);
+
+}
+.match-front img {
+    width: 80px;
+    height: 80px;
 }
 
-.match-symbol-img {
+.perfect-match-symbol-img {
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+}
+
+.jinxed-symbol-img {
     width: 85%;
     height: 85%;
     object-fit: contain;

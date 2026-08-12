@@ -166,6 +166,6 @@ function endChainReactionGame(isWin){
  
     `;
  
-    setTimeout(() => finishRound(isWin, 3), RESULT_REVEAL_MS);
+    setTimeout(() => finishRound(isWin, 4), RESULT_REVEAL_MS);
  
 }

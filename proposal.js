@@ -78,12 +78,14 @@ function showProposalForm(){
                 <textarea name="aboutYou" rows="3" placeholder="e.g. I'm a nerd :)"></textarea>
             </label>
 
-            Any thoughts on this game?
-                <textarea name="gameFeedback" rows="3" placeholder="How was your experience?"></textarea>
+            <label>
+                Any thoughts on this game?
+                <textarea name="gameFeedback" rows="3" placeholder="Tell me about your experience!"></textarea>
             </label>
 
             <button type="submit" id="proposalSubmitBtn">
                 Submit
+            </button>
 
         </form>
 
@@ -141,24 +143,24 @@ async function handleProposalSubmit(event){
 }
 
 function showProposalThanks(){
- 
+
     gameState.hasProposed = true;
- 
+
     const unplayedGames = challenges
         .filter((c) => !gamesEverPlayed.has(c.id))
         .map((c) => c.title
-            .replace(/<span class="material-symbols-outlined">.*?<\/span>/g, "")
-            .replace(/<[^>]+>/g, "")
+            .replace(/<span class="material-symbols-outlined">.*?<\/span>/g, "") // drop the whole icon element, name included
+            .replace(/<[^>]+>/g, "") // catch any other stray tags
             .trim()
         );
- 
+
     const unplayedMessage = unplayedGames.length > 0
-        ? `<p class="proposal-closing-text">You haven't played: ${unplayedGames.join(", ")}  — go check them out!</p>`
+        ? `<p class="proposal-closing-text">You haven't played ${unplayedGames.join(", ")} yet — go check them out!</p>`
         : "";
 
     document.getElementById("game").innerHTML = `
 
-        <h1 class="animate__animated animate__tada">I'm looking forward to meeting you!<span class=\"material-symbols-outlined\">favorite</span></h1>
+        <h1 class="animate__animated animate__tada">I can't wait to see you! <img src=\"icons/heart-suit.svg\" class=\"title-icon\"></h1>
 
             ${unplayedMessage}
 
