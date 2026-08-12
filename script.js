@@ -82,7 +82,7 @@ const challenges = [
     {
         id: "colorDodge",
         title: "Ink'D <img src=\"icons/paintbrush.svg\" class=\"title-icon\">",
-        rules: "Click the color the word says in 3 seconds, not the ink color that it's written in. Get at least 4 rounds right to win!"
+        rules: "ODD round - Click what the word SAYS, EVEN round - Click the color it's PRINTED in. Get at least 6 rounds right to win!"
     },
     {
         id: "chainReaction",
