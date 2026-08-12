@@ -6,7 +6,7 @@ let gameState = {
     hasProposed: false
 };
 
-const RESULT_REVEAL_MS = 4000;
+const RESULT_REVEAL_MS = 3800;
 
 const SOUNDS = {
     tickingClock: new Audio("audio/tickingclock.mp3"),
@@ -82,8 +82,14 @@ const challenges = [
     {
         id: "chainReaction",
         title: "Word Chain <img src=\"icons/link.svg\" class=\"title-icon\">",
-        rules: "Create a chain reaction by clicking the right sequence of tiles!"
-    },    
+        rules: "Guess the missing words to complete the chain!"
+    },
+    {
+        id: "wordSearch",
+        title: "Word Search <img src=\"icons/magnifying-glass-tilted-left.svg\" class=\"title-icon\">",
+        rules: "Find all the hidden words before the timer runs out! Words can be found horizontally, vertically, or diagonally, never backwards."
+    }
+    
 ];
 
 const randomFacts = [
@@ -249,6 +255,7 @@ const GAME_STARTERS = {
     findHeart: () => startFindHeartGame(),
     colorDodge: () => startColorDodgeGame(),
     chainReaction: () => startChainReactionGame(),
+    wordSearch: () => startWordSearchGame()
 };
 
 function startChallenge(event, challengeId){

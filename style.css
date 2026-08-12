@@ -615,7 +615,7 @@ button {
 }
  
 .chain-word-active {
-    background: #feb5cf;
+    background: #f1a9c2;
 }
  
 .chain-word-locked {
@@ -642,4 +642,78 @@ button {
     width: min(90%, 410px);
     flex: 2 1 260px;
     margin-right: 8px;
+}
+
+.word-search-category-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+ 
+.word-search-words {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0 0;
+}
+ 
+.word-search-word {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.5);
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+ 
+.word-search-word-found {
+    background: #4caf7d;
+    color: white;
+    text-decoration: line-through;
+}
+ 
+.word-search-word-missed {
+    background: #e47373;
+    color: white;
+}
+ 
+.word-search-grid {
+    display: grid;
+    gap: 3px;
+ 
+    max-width: 540px;
+    margin: 24px auto 0;
+}
+ 
+.word-search-cell {
+    aspect-ratio: 1;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+ 
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+    user-select: none;
+}
+ 
+.word-search-cell-found {
+    background: #4caf7d;
+    color: white;
+}
+ 
+.word-search-cell-missed {
+    background: #e47373;
+    color: white;
+}
+ 
+.word-search-cell-selected {
+    background: #f2aec9;
 }

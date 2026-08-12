@@ -84,8 +84,6 @@ function renderColorDodgeRound(){
 
         <p class="match-timer">Round ${colorDodgeState.round} of ${COLOR_DODGE_ROUNDS}</p>
 
-        <p>Pick the color the word says — not the color it's printed in</p>
-
         <h1 style="color: ${colorDodgeState.inkColor.hex};">${colorDodgeState.targetWord.name.toUpperCase()}</h1>
 
         <div class="color-swatch-grid">
