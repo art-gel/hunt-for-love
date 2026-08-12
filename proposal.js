@@ -1,17 +1,4 @@
-// The finale — shown once hearts hit maxHearts. "Will you go on a
-// date with me?" with a No button that dodges the cursor, leading
-// to a short form, submitted to Formspree — no backend/database
-// needed for a static GitHub Pages site, and no secrets exposed in
-// this public code, since a Formspree form endpoint can only ever
-// submit to that one form, not access anything else.
-//
-// SETUP REQUIRED: replace FORMSPREE_ENDPOINT below with your own
-// form's URL from formspree.io (sign up, New Form, copy the
-// endpoint — looks like https://formspree.io/f/xxxxxxxx). Submit
-// the form once yourself after deploying to confirm it shows up in
-// your Formspree dashboard.
-
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xrenndbd"; // <-- replace this before deploying
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xrenndbd";
 
 function showProposalScreen(){
 
@@ -38,11 +25,6 @@ function dodgeNoButton(event){
     const btn = document.getElementById("noButton");
     if (!btn) return;
 
-    // #game has backdrop-filter set, which makes it the containing
-    // block for any position:fixed descendant in most browsers —
-    // meaning "fixed" would actually be relative to #game's own box,
-    // not the real viewport. Moving the button to document.body
-    // sidesteps that entirely.
     if (btn.parentElement !== document.body) {
         document.body.appendChild(btn);
     }
@@ -50,9 +32,6 @@ function dodgeNoButton(event){
     const btnWidth = btn.offsetWidth || 80;
     const btnHeight = btn.offsetHeight || 46;
 
-    // confine the dodge to a box around the center of the screen,
-    // rather than the full viewport — keeps it from ever reaching
-    // the edges or corners
     const regionWidth = window.innerWidth * 0.5;
     const regionHeight = window.innerHeight * 0.5;
     const regionLeft = (window.innerWidth - regionWidth) / 2;
@@ -80,8 +59,8 @@ function showProposalForm(){
         <form id="proposalForm" class="proposal-form" onsubmit="handleProposalSubmit(event)">
 
             <label>
-                Name (First name + last initial is fine)
-                <input type="text" name="name" placeholder="e.g.Harry P." required>
+                First Name
+                <input type="text" name="name" placeholder="e.g. Harry P." required>
             </label>
 
             <label>
@@ -96,17 +75,25 @@ function showProposalForm(){
 
             <label>
                 Tell me something about yourself!
-                <textarea name="aboutYou" rows="3"></textarea>
+                <textarea name="aboutYou" rows="3" placeholder="e.g. I'm a nerd :)"></textarea>
+            </label>
+
+            Any thoughts on this game?
+                <textarea name="gameFeedback" rows="3" placeholder="How was your experience?"></textarea>
             </label>
 
             <button type="submit" id="proposalSubmitBtn">
                 Submit
-            </button>
 
         </form>
 
     `;
 
+}
+
+function getProposalSourceId(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id") || "";
 }
 
 async function handleProposalSubmit(event){
@@ -122,7 +109,9 @@ async function handleProposalSubmit(event){
         name: form.name.value,
         dateSuggestions: form.dateSuggestions.value,
         freeDays: form.freeDays.value,
-        aboutYou: form.aboutYou.value
+        aboutYou: form.aboutYou.value,
+        gameFeedback: form.gameFeedback.value,
+        linkId: getProposalSourceId()
     };
 
     try {
@@ -152,14 +141,26 @@ async function handleProposalSubmit(event){
 }
 
 function showProposalThanks(){
-
+ 
     gameState.hasProposed = true;
+ 
+    const unplayedGames = challenges
+        .filter((c) => !gamesEverPlayed.has(c.id))
+        .map((c) => c.title
+            .replace(/<span class="material-symbols-outlined">.*?<\/span>/g, "")
+            .replace(/<[^>]+>/g, "")
+            .trim()
+        );
+ 
+    const unplayedMessage = unplayedGames.length > 0
+        ? `<p class="proposal-closing-text">You haven't played: ${unplayedGames.join(", ")}  — go check them out!</p>`
+        : "";
 
     document.getElementById("game").innerHTML = `
 
-        <h1 class="animate__animated animate__tada">I'm looking forward to meeting you!💕</h1>
+        <h1 class="animate__animated animate__tada">I'm looking forward to meeting you!<span class=\"material-symbols-outlined\">favorite</span></h1>
 
-        <p>We'll be in touch soon.</p>
+            ${unplayedMessage}
 
         <button onclick="continuePlayingAfterProposal()">
             Keep Playing

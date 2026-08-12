@@ -48,8 +48,8 @@ button {
     align-items: center;
     gap: 6px;
 
-    padding: 15px 24px;
-    max-width: 260px;
+    padding: 18px 28px;
+    max-width: 250px;
 
     background: rgba(255, 255, 255, 0.276);
     border-radius: 20px;
@@ -81,14 +81,16 @@ button {
 }
 
 #heartsDisplay {
-    font-size: 28px;
+    font-size: 30px;
     line-height: 1.3;
     margin-bottom: 5px;
     text-align: center;
+    right: 30px;
 }
 
 #heartsPill .heart-filled {
-    filter: none;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    color: #e63950;
 }
 
 .hearts-goal {
@@ -100,12 +102,14 @@ button {
 }
 
 #heartsPill .heart-empty {
-    opacity: 0.35;
+    color: #ffffff;
+    opacity: 0.5;
 }
 
 
 #game {
-    width: min(94vw, 900px);
+    position: relative;
+    width: min(94vw, 1000px);
     padding: 40px;
 
     text-align: center;
@@ -337,11 +341,11 @@ button {
 }
 
 .matrix-tile.wrong {
-    background: #d89292;
+    background: #d58b8b;
 }
 
 .matrix-tile.reveal {
-    background: #ecd7a8;
+    background: rgb(242, 227, 193);
 }
 
 .matrix-candy-img {
@@ -358,17 +362,33 @@ button {
 }
 
 .password-word {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     letter-spacing: 8px;
-    margin: 10px 0 16px;
+    margin: 24px 0 16px;
 }
 
 .password-hint {
-    font-size: 16px;
+    font-size: 14px;
     font-style: italic;
     opacity: 0.85;
-    margin-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 28px;
+}
+
+.password-hint .title-icon {
+    height: 15px;
+    width: 15px;
+}
+
+.password-tries-corner {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+
+    margin: 0;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .password-keyboard {
@@ -376,15 +396,17 @@ button {
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
 
-    margin-top: 12px;
+    max-width: 380px;
+    margin: 0 auto;
 }
 
 .password-letter {
-    padding: 8px 0;
+    padding: 9px 0;
     margin-top: 0;
 
-    font-size: 14px;
-    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 7px;
 }
 
 .password-letter.correct {
@@ -426,24 +448,30 @@ button {
 
 .shuffle-arena {
     position: relative;
-    height: 150px;
+    height: 245px;
     margin: 16px auto 0;
 }
 
 .find-card {
     position: absolute;
     top: 0;
-    width: 110px;
-    height: 150px;
+    width: 160px;
+    height: 240px;
     transition: left 0.25s ease;
 }
 
 .find-card .card-front {
-    font-size: 40px;
+    font-size: 70px;
 }
 
 .find-card .card-back {
-    font-size: 48px;
+    font-size: 70px;
+}
+
+.find-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .proposal-buttons {
@@ -538,4 +566,80 @@ button {
 #soundBadge .material-symbols-outlined,
 .art-credit .material-symbols-outlined {
     font-size: 20px;
+}
+
+.title-icon {
+    height: 26px;
+    width: 26px;
+    vertical-align: middle;
+}
+
+.chain-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin: 40px 0 48px;
+}
+
+.chain-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.chain-form button {
+    margin-top: 0;
+}
+
+.chain-form .cipher-input {
+    max-width: 220px;
+}
+ 
+.chain-word {
+    padding: 10px 14px;
+ 
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+ 
+    border-radius: 8px;
+}
+ 
+.chain-word-solved {
+    background: #4caf7d;
+    color: white;
+}
+ 
+.chain-word-active {
+    background: #feb5cf;
+}
+ 
+.chain-word-locked {
+    background: rgba(255, 255, 255, 0.4);
+    opacity: 0.6;
+}
+ 
+.chain-plus {
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 0.6;
+}
+
+.cipher-input {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.7);
+    color: #7e1234;
+    font-family: inherit;
+    font-size: 16px;
+
+    width: min(90%, 410px);
+    flex: 2 1 260px;
+    margin-right: 8px;
 }

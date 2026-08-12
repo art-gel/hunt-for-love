@@ -6,7 +6,7 @@ let gameState = {
     hasProposed: false
 };
 
-const RESULT_REVEAL_MS = 3000;
+const RESULT_REVEAL_MS = 4000;
 
 const SOUNDS = {
     tickingClock: new Audio("audio/tickingclock.mp3"),
@@ -51,34 +51,39 @@ updateHearts();
 const challenges = [
     {
         id: "stopTheClock",
-        title: "Hit Ten <span class=\"material-symbols-outlined\">timer</span>",
-        rules: "Hit Stop as close to 10.00s as you can for both rounds."
+        title: "Hit Ten <img src=\"icons/timer-clock.svg\" class=\"title-icon\">",
+        rules: "Stop the timer as close to 10.00s as you can, the second round runs faster."
     },
     {
         id: "matchGame",
-        title: "Match Up <span class=\"material-symbols-outlined\">theater_comedy</span>",
+        title: "Match Up <img src=\"icons/performing-arts.svg\" class=\"title-icon\">",
     
     },
     {
         id: "matrix",
-        title: "Sweet Memory <span class=\"material-symbols-outlined\">icecream</span>",
-        rules: "Memories the candies and click the right tiles. Each round gets tougher."
+        title: "Sweet Memory <img src=\"icons/candy.svg\" class=\"title-icon\">",
+        rules: "Memorize where the candies are, then click their locations after they disappear. Each round gets tougher."
     },
     {
         id: "password",
-        title: "Password <span class=\"material-symbols-outlined\">match_case</span>",
+        title: "Password <img src=\"icons/key.svg\" class=\"title-icon\">",
         rules: "Figure out the hidden password. 6 wrong guesses and it's game over."
     },
     {
         id: "findHeart",
-        title: "Find The Heart <span class=\"material-symbols-outlined\">favorite</span>",
-        rules: "Remember the heart and click the right card once they're shuffled."
+        title: "Find The Heart <img src=\"icons/heart-suit.svg\" class=\"title-icon\">",
+        rules: "Keep your eye on the heart, then pick the right card after they're shuffled."
     },
     {
         id: "colorDodge",
-        title: "Ink'D <span class=\"material-symbols-outlined\">palette</span>",
-        rules: "Click the color the word says, not the ink color. Get at least 4 rounds right to win!"
-    }
+        title: "Ink'D <img src=\"icons/paintbrush.svg\" class=\"title-icon\">",
+        rules: "Click the color the word says in 3 seconds, not the ink color that it's written in. Get at least 4 rounds right to win!"
+    },
+    {
+        id: "chainReaction",
+        title: "Word Chain <img src=\"icons/link.svg\" class=\"title-icon\">",
+        rules: "Create a chain reaction by clicking the right sequence of tiles!"
+    },    
 ];
 
 const randomFacts = [
@@ -86,10 +91,9 @@ const randomFacts = [
     "I'm a self-taught artist!",
     "My prefereed medium is digital art!",
     "Watercolor is my new hobby!",
-    "Why I chose Computer Science as my Major? Art doesn't pay the bills!",
-    "Drawing people and certain animals are my weeknesses.",
-    "I've inherited the artistic talents from my mom!",
     "Drawing calms my mind and brings me peace.",
+    "I competeted in cross country during high school!",
+    "My dream destinations are Japan and Italy!",
 ];
 
 const unluckyPhrases = [
@@ -97,6 +101,7 @@ const unluckyPhrases = [
     "Are you even trying?",
     "Impressive miss",
     "Nice try...almost",
+    "A for effort",
 ];
 
 const quitterPhrases = [
@@ -113,16 +118,17 @@ function drawTwoChallenges(){
     return shuffled.slice(0, 2);
 }
 
-// Tracks the last few challenges actually PLAYED (not just shown),
-// most recent first. Used to steer new draws away from repeats until
-// the rest of the roster has had a turn — pure random selection was
-// technically fair but felt repetitive over a short session.
 let recentlyPlayed = [];
 const RECENT_HISTORY_LENGTH = 4;
+
+// Never trimmed, unlike recentlyPlayed — tracks every game played at
+// least once this session, so we can tell someone what they missed.
+let gamesEverPlayed = new Set();
 
 function trackPlayed(challengeId){
     recentlyPlayed = [challengeId, ...recentlyPlayed.filter((id) => id !== challengeId)]
         .slice(0, RECENT_HISTORY_LENGTH);
+    gamesEverPlayed.add(challengeId);
 }
 
 function pickFreshChallenge(excludeIds){
@@ -241,7 +247,8 @@ const GAME_STARTERS = {
     matrix: () => startMatrixGame(),
     password: () => startPasswordGame(),
     findHeart: () => startFindHeartGame(),
-    colorDodge: () => startColorDodgeGame()
+    colorDodge: () => startColorDodgeGame(),
+    chainReaction: () => startChainReactionGame(),
 };
 
 function startChallenge(event, challengeId){
@@ -313,6 +320,7 @@ function finishRound(isCorrect, heartAmount = 1){
         }
 
         const isMaxedOut = gameState.hearts >= gameState.maxHearts && !gameState.hasProposed;
+        const canReplayProposal = gameState.hearts >= gameState.maxHearts && gameState.hasProposed;
 
         playSound("correct");
 
@@ -320,7 +328,8 @@ function finishRound(isCorrect, heartAmount = 1){
             heading: `+${heartAmount} Heart${heartAmount === 1 ? "" : "s"}`,
             message: `Random Fact about Angel: ${pickRandom(randomFacts)}`,
             animation: "animate__tada",
-            isFinal: isMaxedOut
+            isFinal: isMaxedOut,
+            canReplayProposal
         });
 
     } else {
@@ -341,7 +350,7 @@ function finishRound(isCorrect, heartAmount = 1){
 
 }
 
-function showResult({ heading, message, animation, isFinal }){
+function showResult({ heading, message, animation, isFinal, canReplayProposal }){
 
     document.getElementById("game").innerHTML = `
 
@@ -361,6 +370,12 @@ function showResult({ heading, message, animation, isFinal }){
             <button onclick="showFinalScreen()">
                 Give up
             </button>
+
+            ${canReplayProposal ? `
+                <button onclick="showProposalScreen()">
+                    Ask Me The Question Again?
+                </button>
+            ` : ""}
         `}
 
     `;
@@ -376,12 +391,12 @@ function showFinalScreen(){
         document.getElementById("game").innerHTML = `
 
             <h1 class="animate__animated animate__fadeOut" style="animation-delay: 1.5s;">
-                Alright, alright. Game over.
+                Game over.
             </h1>
 
         `;
 
-        setTimeout(resetGame, 2500);
+        setTimeout(resetGame, 2800);
 
         return;
 
@@ -392,7 +407,7 @@ function showFinalScreen(){
         <h1 class="animate__animated animate__wobble">${pickRandom(quitterPhrases)}</h1>
 
         <button onclick="showChallengeSelection()">
-            Ok fine, one more round
+            One more round
         </button>
 
     `;
@@ -407,13 +422,14 @@ function resetGame(){
     currentPair = [];
     lastPickedId = null;
     recentlyPlayed = [];
+    gamesEverPlayed = new Set();
     keptCardStreak = 0;
 
     updateHearts();
 
     document.getElementById("game").innerHTML = `
 
-        <h1>Quest for Yes</h1>
+        <h1>Hunt for Love <img src=\"icons/heart-suit.svg\" class=\"title-icon\"></h1>
 
         <p id="introText">
             I have a question for you...
@@ -456,9 +472,9 @@ function updateHearts(){
 
     for (let i = 0; i < gameState.maxHearts; i++) {
         if (i < gameState.hearts) {
-            hearts += `<span class="heart-filled">❤️</span>`;
+            hearts += `<span class="material-symbols-outlined heart-filled">favorite</span>`;
         } else {
-            hearts += `<span class="heart-empty">🤍</span>`;
+            hearts += `<span class="material-symbols-outlined heart-empty">favorite</span>`;
         }
     }
 

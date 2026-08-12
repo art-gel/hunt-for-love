@@ -1,5 +1,20 @@
+// Sweet Memory — a grid of tiles flashes a few candies, then goes
+// blank. Click every tile that had a candy, from memory, within the
+// time limit. 3 rounds, each harder than the last (more tiles to
+// remember). Complete all 3 to win; a wrong click or running out of
+// time on any round loses immediately. Calls finishRound(true/false).
+//
+// CANDY_TYPES has an `image` field per candy — currently null, so it
+// falls back to an emoji placeholder. Once you upload your 3 candy
+// drawings, set each one's `image` to its file path (e.g.
+// "pictures/candy1.png") and the tile will render that instead —
+// no other changes needed. Which specific candy lands on which tile
+// each round is random and doesn't affect scoring — only the
+// position matters, so any candy type is equally "correct" as long
+// as it's in the right spot.
+
 const MATRIX_GRID_SIZE = 5; // 5x5 = 25 tiles
-const MATRIX_SELECT_TIME_LIMIT = 15;
+const MATRIX_SELECT_TIME_LIMIT = 15; // seconds to make your selections, per round
 
 const CANDY_TYPES = [
     { id: "candy1", label: "Candy 1", emoji: "🍬", image: "pictures/candy1.png" },
@@ -7,6 +22,7 @@ const CANDY_TYPES = [
     { id: "cottonCandy", label: "Cotton Candy", emoji: "☁️", image: "pictures/cottoncandy.png" }
 ];
 
+// preload so images don't pop in mid-flip during the memorize flash
 CANDY_TYPES.forEach((c) => {
     if (c.image) {
         const img = new Image();
@@ -15,15 +31,15 @@ CANDY_TYPES.forEach((c) => {
 });
 
 const MATRIX_ROUNDS = [
-    { highlightCount: 3, memorizeMs: 4000 },
-    { highlightCount: 6, memorizeMs: 5000 },
-    { highlightCount: 9, memorizeMs: 5000 }
+    { highlightCount: 4, memorizeMs: 2500 },
+    { highlightCount: 8, memorizeMs: 2200 },
+    { highlightCount: 11, memorizeMs: 2000 }
 ];
 
 let matrixState = {
     round: 0,
     highlightSet: new Set(),
-    candyAt: new Map(),
+    candyAt: new Map(), // tile index -> candy object
     foundSet: new Set(),
     phase: "memorize", // memorize | selecting | done
     timeLeft: MATRIX_SELECT_TIME_LIMIT,

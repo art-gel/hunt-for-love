@@ -1,9 +1,9 @@
-const FIND_HEART_CARD_COUNT = 6;
-const FIND_HEART_CARD_WIDTH = 110;
-const FIND_HEART_CARD_GAP = 16;
+const FIND_HEART_CARD_COUNT = 5;
+const FIND_HEART_CARD_WIDTH = 180;
+const FIND_HEART_CARD_GAP = 12;
 const FIND_HEART_PEEK_MS = 1500;
 const FIND_HEART_SHUFFLE_STEPS = 5;
-const FIND_HEART_SHUFFLE_STEP_MS = 270;
+const FIND_HEART_SHUFFLE_STEP_MS = 260;
 
 let findHeartState = {
     heartCardId: 0,
@@ -59,7 +59,7 @@ function buildFindHeartArena(showFaces, statusText){
                  style="left: ${left}px;" onclick="handleFindHeartGuess(${cardId})">
                 <div class="card-inner">
                     <div class="card-front">❓</div>
-                    <div class="card-back">${isHeart ? "❤️" : "☠️"}</div>
+                    <div class="card-back">${isHeart ? `<img src="pictures/heart.png" class="find-card-img">` : `<img src="pictures/skull.png" class="find-card-img">`}</div>
                 </div>
             </div>
         `;

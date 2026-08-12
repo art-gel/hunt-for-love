@@ -1,49 +1,59 @@
 const PASSWORD_ENTRIES = [
-    { word: "JAZZ", hint: "Music genre", extraHint: "Often played with brass instruments" },
     { word: "SPONGEBOB", hint: "Cartoon character", extraHint: "Owns a pineapple house" },
     { word: "SWEETHEART", hint: "A term of endearment", extraHint: "Two words: Something sugary + organ" },
-    { word: "OCTOPUS", hint: "Sea creature", extraHint: "Has three hearts and is one of Angel's favorite animals" },
+    { word: "OCTOPUS", hint: "Sea creature", extraHint: "Has three hearts and eight arms" },
     { word: "SURPRISE", hint: "Unexpected", extraHint: "A type of party or gift for someone" },
     { word: "PUZZLE", hint: "Brain teaser", extraHint: "Jigsaw pieces make up one of these" },
-    { word: "TARANTULA", hint: "Feared creature", extraHint: "Insect" },
-    { word: "LUIGI", hint: "Video game character", extraHint: "Italian plumber" },
-    { word: "MINION", hint: "Cartoon character", extraHint: "Loves bananas" },
     { word: "HEART", hint: "Organ", extraHint: "Can't win the game without it" }
 ];
 
 const PASSWORD_MAX_WRONG = 6;
 const PASSWORD_EXTRA_HINT_THRESHOLD = 3; // wrong guesses needed to unlock the extra hint
 
-const PASSWORD_STAGES = ["🙂", "😐", "😟", "😧", "😢", "😭", "💀"];
-
-function renderCharacterStage(wrongCount){
-
-    const emoji = PASSWORD_STAGES[wrongCount];
-
-    return `<div class="password-character-wrap"><span>${emoji}</span></div>`;
-
-}
-
 let passwordState = {
     word: "",
     hint: "",
     extraHint: "",
-    extraHintRevealed: false,
     guessed: new Set(),
     wrongCount: 0
 };
 
 let passwordKeyListener = null;
 
+// A shuffled "bag" drawn from without replacement, so every word in
+// PASSWORD_ENTRIES gets used once before any repeats. When the bag
+// empties, it reshuffles a fresh one — with a small check so the
+// last word of one cycle can't immediately repeat as the first word
+// of the next.
+let passwordBag = [];
+let lastPasswordEntry = null;
+
+function drawPasswordEntry(){
+
+    if (passwordBag.length === 0) {
+
+        passwordBag = [...PASSWORD_ENTRIES].sort(() => Math.random() - 0.5);
+
+        const nextUp = passwordBag[passwordBag.length - 1];
+        if (passwordBag.length > 1 && nextUp === lastPasswordEntry) {
+            [passwordBag[passwordBag.length - 1], passwordBag[0]] = [passwordBag[0], passwordBag[passwordBag.length - 1]];
+        }
+
+    }
+
+    const entry = passwordBag.pop();
+    lastPasswordEntry = entry;
+    return entry;
+
+}
+
 function startPasswordGame(){
 
-    const entry = PASSWORD_ENTRIES[Math.floor(Math.random() * PASSWORD_ENTRIES.length)];
-
+    const entry = drawPasswordEntry();
     passwordState = {
         word: entry.word.toUpperCase(),
         hint: entry.hint,
         extraHint: entry.extraHint,
-        extraHintRevealed: false,
         guessed: new Set(),
         wrongCount: 0
     };
@@ -106,19 +116,15 @@ function renderPassword(){
 
         <h1>Password</h1>
 
-        ${renderCharacterStage(passwordState.wrongCount)}
-
         <p class="password-word">${displayWord}</p>
 
         <p class="password-hint">Hint: ${passwordState.hint}</p>
 
-        ${passwordState.wrongCount >= PASSWORD_EXTRA_HINT_THRESHOLD ? (
-            passwordState.extraHintRevealed
-                ? `<p class="password-hint">Extra hint: ${passwordState.extraHint}</p>`
-                : `<button onclick="revealExtraHint()">Show Extra Hint</button>`
-        ) : ""}
+        ${passwordState.wrongCount >= PASSWORD_EXTRA_HINT_THRESHOLD ? `
+            <p class="password-hint"> Extra hint: ${passwordState.extraHint}</p>
+        ` : ""}
 
-        <p class="match-timer">${PASSWORD_MAX_WRONG - passwordState.wrongCount} wrong guesses left</p>
+        <p class="password-tries-corner">${PASSWORD_MAX_WRONG - passwordState.wrongCount} wrong guesses left</p>
 
         <div class="password-keyboard">
             ${lettersHtml}
@@ -136,15 +142,10 @@ function renderPasswordReveal(isWin){
             ${isWin ? "You got it!" : "Out of guesses"}
         </h1>
 
-        <p>The password was: <span class="password-word-inline">${passwordState.word}</span></p>
+        <p>The password was: <span style="font-size: 17px;">${passwordState.word}</span></p>
 
     `;
 
-}
-
-function revealExtraHint(){
-    passwordState.extraHintRevealed = true;
-    renderPassword();
 }
 
 function handlePasswordGuess(letter){

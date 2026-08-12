@@ -27,7 +27,7 @@ MATCH_SETS.flat().forEach((symbol) => {
     }
 });
 
-const MATCH_TIME_LIMIT = 30; // seconds
+const MATCH_TIME_LIMIT = 35; // seconds
 
 function getMatchUpRulesText(){
     return matchSetIndex === 0
