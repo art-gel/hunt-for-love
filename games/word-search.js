@@ -1,21 +1,32 @@
-
-
 const WORD_SEARCH_GRID_SIZE = 10;
 const WORD_SEARCH_TIME_LIMIT_S = 45;
-const WORD_SEARCH_WIN_THRESHOLD = 5; // out of 8 words per category
+
+function getWordSearchWinThreshold(totalWords){
+    return Math.min(totalWords, Math.ceil(totalWords * 0.6));
+}
+const WORD_SEARCH_REVEAL_HOLD_MS = 4000;
+const WORD_SEARCH_WIN_TRANSITION_MS = 2600;
 
 const WORD_SEARCH_CATEGORIES = [
-    { name: "Animals", words: ["CAT", "DOG", "LION", "TIGER", "BEAR", "WOLF", "FOX", "DEER"] },
-    { name: "Fruits", words: ["APPLE", "GRAPE", "MANGO", "LEMON", "PEACH","PLUM"] },
-    { name: "Colors", words: ["RED", "BLUE", "GREEN", "BLACK", "WHITE", "BROWN", "PURPLE", "PINK"] },
-    { name: "Sports", words: ["GOLF", "TENNIS", "BOXING", "SOCCER", "HOCKEY", "SKIING"] }
-];
+    { name: "Animals", words: ["CAT", "DOG", "LION", "PANDA", "BEAR", "WOLF", "PENGUIN"] },
+    { name: "Fruits", words: ["APPLE", "MANGO", "LEMON", "PEACH","BANANA", "KIWI", "CHERRY"] },
+    { name: "Colors", words: ["RED", "BLUE", "GREEN", "BLACK", "PINK", "YELLOW", "ORANGE"] },
+    { name: "Body Parts", words: ["EYE", "EAR", "NOSE", "MOUTH", "HAND", "FOOT", "LEG"] },
+    { name: "Weather", words: ["SUN", "RAIN", "SNOW", "WIND", "CLOUD", "STORM", "FOG"] },
+    { name: "Drinks", words: ["WATER", "COFFEE", "TEA", "JUICE", "SODA", "MILK", "WINE"] },
+    { name: "Emotions", words: ["HAPPY", "SAD", "ANGRY", "EXCITED", "NERVOUS", "CALM", "SURPRISED"] },
+    { name: "Countries", words: ["USA", "CANADA", "FRANCE", "GERMANY", "JAPAN", "BRAZIL", "INDIA"] },
+    { name: "Furniture", words: ["TABLE", "CHAIR", "SOFA", "BED", "DESK", "CABINET", "SHELF"] },
+    { name: "Clothing", words: ["SHIRT", "PANTS", "DRESS", "HAT", "SHOES", "JACKET", "SOCKS"] },
+    { name: "Harry Potter", words: ["HARRY", "RON", "HERMIONE", "DUMBLEDORE", "SNAPE", "HAGRID", "OWL"] },
+    { name: "Sports", words: ["SOCCER", "BASKETBALL", "TENNIS", "BASEBALL", "SWIMMING", "GOLF", "SWIMMING"] }
+];  
 
 const WORD_SEARCH_DIRECTIONS = [
-    [0, 1],  // right
-    [1, 0],  // down
-    [1, 1],  // diagonal down-right
-    [1, -1]  // diagonal down-left
+    [0, 1],  [0, 1],               // right
+    [1, 0],  [1, 0],                  // down
+    [1, 1], [1, 1], [1, 1],    // diagonal down-right — weighted 3x
+    [1, -1], [1, -1], [1, -1]  // diagonal down-left — weighted 3x
 ];
 
 let wordSearchCategoryBag = [];
@@ -43,10 +54,10 @@ function drawWordSearchCategory(){
 
 let wordSearchState = {
     category: null,
-    grid: [], // 2D array of letters
-    placements: [], // [{ word, cells: [[r,c], ...] }]
+    grid: [],
+    placements: [],
     foundWords: new Set(),
-    firstClick: null, // {r, c} of the first cell clicked, or null
+    firstClick: null,
     timeLeft: WORD_SEARCH_TIME_LIMIT_S,
     timerId: null,
     phase: "playing" // playing | done
@@ -65,7 +76,7 @@ function buildWordSearchGrid(words){
         let placed = false;
         let attempts = 0;
 
-        while (!placed && attempts < 200) {
+        while (!placed && attempts < 500) {
 
             attempts += 1;
 
@@ -119,6 +130,8 @@ function startWordSearchGame(){
 
     if (wordSearchState.timerId) clearInterval(wordSearchState.timerId);
 
+    document.getElementById("game").classList.add("game-compact-padding");
+
     const category = drawWordSearchCategory();
     const { grid, placements } = buildWordSearchGrid(category.words);
 
@@ -167,7 +180,6 @@ function handleWordSearchCellClick(r, c){
         return;
     }
 
-    // does this line match any unplaced word's cells (in either direction)?
     const match = wordSearchState.placements.find((p) => {
         if (wordSearchState.foundWords.has(p.word)) return false;
         const cellsForward = p.cells;
@@ -181,8 +193,10 @@ function handleWordSearchCellClick(r, c){
     if (match) {
         wordSearchState.foundWords.add(match.word);
         if (wordSearchState.foundWords.size >= wordSearchState.category.words.length) {
+            clearInterval(wordSearchState.timerId);
+            stopSound("nostalgia");
             renderWordSearch();
-            setTimeout(() => endWordSearch(), RESULT_REVEAL_MS);
+            setTimeout(() => endWordSearch(), WORD_SEARCH_WIN_TRANSITION_MS);
             return;
         }
     }
@@ -223,10 +237,7 @@ function renderWordSearch(){
             <p class="heist-tries" id="wordSearchTimer">${wordSearchState.timeLeft}s</p>
         </div>
 
-        <p class="catch-hint" style= "font-size: 14px; margin-bottom: 10px;">
-            Category: <strong>${wordSearchState.category.name}</strong> — click a word's first and last letter
-        </p>
-
+        <p class="catch-hint">Category: <strong>${wordSearchState.category.name}</strong> — click a word's first and last letter</p>
         <div class="word-search-grid" style="grid-template-columns: repeat(${WORD_SEARCH_GRID_SIZE}, 1fr);">
             ${gridHtml}
         </div>
@@ -246,11 +257,20 @@ function endWordSearch(){
     stopSound("nostalgia");
 
     const foundCount = wordSearchState.foundWords.size;
-    const isWin = foundCount >= WORD_SEARCH_WIN_THRESHOLD;
+    const totalWords = wordSearchState.category.words.length;
+    const isWin = foundCount >= getWordSearchWinThreshold(totalWords);
+    const foundEverything = foundCount >= totalWords;
+
+    if (foundEverything) {
+        // nothing left unfound to reveal — go straight to the result
+        finishRound(isWin, 2);
+        return;
+    }
 
     renderWordSearchReveal();
 
-    setTimeout(() => finishRound(isWin, 2), RESULT_REVEAL_MS);
+    const transitionDelay = isWin ? WORD_SEARCH_WIN_TRANSITION_MS : WORD_SEARCH_REVEAL_HOLD_MS;
+    setTimeout(() => finishRound(isWin, 2), transitionDelay);
 
 }
 

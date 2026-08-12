@@ -124,7 +124,7 @@ function renderPassword(){
             <p class="password-hint"> Extra hint: ${passwordState.extraHint}</p>
         ` : ""}
 
-        <p class="password-tries-corner">${PASSWORD_MAX_WRONG - passwordState.wrongCount} wrong guesses left</p>
+        <p class="password-tries-corner">${PASSWORD_MAX_WRONG - passwordState.wrongCount} ${(PASSWORD_MAX_WRONG - passwordState.wrongCount) === 1 ? "guess" : "guesses"} left</p>
 
         <div class="password-keyboard">
             ${lettersHtml}

@@ -87,7 +87,7 @@ const challenges = [
     {
         id: "wordSearch",
         title: "Word Search <img src=\"icons/magnifying-glass-tilted-left.svg\" class=\"title-icon\">",
-        rules: "Find all the hidden words before the timer runs out! Words can be found horizontally, vertically, or diagonally, never backwards."
+        rules: "Find at least 5 hidden words to win before the timer runs out!"
     }
     
 ];
@@ -107,7 +107,6 @@ const unluckyPhrases = [
     "Are you even trying?",
     "Impressive miss",
     "Nice try...almost",
-    "A for effort",
 ];
 
 const quitterPhrases = [
@@ -204,7 +203,7 @@ function showChallengeSelection() {
             <div class="card-inner">
 
                 <div class="card-front">
-                    ❓
+                    <img src=\"icons/red-question-mark.svg\">
                 </div>
 
                 <div class="card-back">
@@ -299,6 +298,8 @@ function beginGame(challengeId){
 
     clearSidePanel();
     trackPlayed(challengeId);
+
+    document.getElementById("game").classList.remove("game-compact-padding");
 
     const startGame = GAME_STARTERS[challengeId];
     if (startGame) {

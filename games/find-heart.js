@@ -29,7 +29,7 @@ function startFindHeartGame(){
         revealed: false
     };
 
-    buildFindHeartArena(true, "Remember where it is...");
+    buildFindHeartArena(true, "Remember where the heart is...");
 
     setTimeout(() => {
 
@@ -39,7 +39,7 @@ function startFindHeartGame(){
         setTimeout(() => {
             playSound("shuffle");
             runShuffleStep(0);
-        }, 300);
+        }, 400);
 
     }, FIND_HEART_PEEK_MS);
 
@@ -58,7 +58,7 @@ function buildFindHeartArena(showFaces, statusText){
             <div class="card find-card ${showFaces ? "flipped" : ""}" id="findCard${cardId}"
                  style="left: ${left}px;" onclick="handleFindHeartGuess(${cardId})">
                 <div class="card-inner">
-                    <div class="card-front">❓</div>
+                    <div class="card-front"><img src="icons/red-question-mark.svg"></div>
                     <div class="card-back">${isHeart ? `<img src="pictures/heart.png" class="find-card-img">` : `<img src="pictures/skull.png" class="find-card-img">`}</div>
                 </div>
             </div>
