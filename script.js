@@ -1,7 +1,7 @@
 let gameState = {
     hearts: 0,
     roundsCompleted: 0,
-    maxHearts: 10,
+    maxHearts: 15,
     quitAttempts: 0,
     hasProposed: false
 };
@@ -56,8 +56,8 @@ const challenges = [
     },
     {
         id: "perfectMatch",
-        title: "Perfect Match <img src=\"icons/smiling-face-with-halo.svg\" class=\"title-icon\">",
-        rules: "Match every pair of Angel's's favorite things before the timer runs out!"
+        title: "Match Up <img src=\"icons/smiling-face-with-halo.svg\" class=\"title-icon\">",
+        rules: "Match every pair of Angel's favorite things before the timer runs out!"
     },
     {
         id: "jinxed",
@@ -92,7 +92,7 @@ const challenges = [
     {
         id: "wordSearch",
         title: "Word Search <img src=\"icons/magnifying-glass-tilted-left.svg\" class=\"title-icon\">",
-        rules: "Find at least 5 hidden words to win before the timer runs out!"
+        rules: "Find at least 5 hidden words to win before the timer runs out! Remember to click a word's first and last letter to select it."
     }
     
 ];
@@ -103,7 +103,7 @@ const randomFacts = [
     "My prefereed medium is digital art!",
     "Watercolor is my new hobby!",
     "Drawing calms my mind and brings me peace.",
-    "I competeted in cross country during high school!",
+    "I competed in cross country during high school!",
     "My dream destinations are Japan and Italy!",
 ];
 

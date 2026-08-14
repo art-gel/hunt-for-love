@@ -191,7 +191,7 @@ function endMatrixGame(isWin){
         return;
     }
 
-    finishRound(true, 4);
+    finishRound(true, 5);
 
 }
 

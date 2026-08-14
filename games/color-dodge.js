@@ -155,7 +155,7 @@ function resolveColorDodgeRound(isCorrect){
             stopSound("nostalgia");
             renderColorDodgeFinalTally();
             const won = colorDodgeState.correctCount >= COLOR_DODGE_WIN_THRESHOLD;
-            setTimeout(() => finishRound(won, 2), RESULT_REVEAL_MS);
+            setTimeout(() => finishRound(won, 3), RESULT_REVEAL_MS);
             return;
         }
 
@@ -175,7 +175,7 @@ function renderColorDodgeFinalTally(){
             ${colorDodgeState.correctCount} of ${COLOR_DODGE_ROUNDS} correct
         </h1>
 
-        <p>${won ? "Great focus!" : "So close — better luck next time."}</p>
+        <p>${won ? "Great focus!" : "So close."}</p>
 
     `;
 

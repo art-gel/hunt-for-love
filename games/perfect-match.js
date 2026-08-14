@@ -95,7 +95,7 @@ function renderPerfectMatchGame(){
 
     document.getElementById("game").innerHTML = `
 
-        <h1>Perfect Match</h1>
+        <h1>Match Up</h1>
 
         <p class="match-timer" id="perfectMatchTimer">${perfectMatchState.timeLeft}s left</p>
 

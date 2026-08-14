@@ -94,7 +94,7 @@ function stopTheClock(){
 
         <p>${diff.toFixed(2)}s off target</p>
 
-        ${isExact ? `<p>Exactly 10 seconds! 🎯</p>` : ""}
+        ${isExact ? `<p>Exactly 10 seconds!</p>` : ""}
 
     `;
 
