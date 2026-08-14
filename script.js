@@ -100,11 +100,14 @@ const challenges = [
 const randomFacts = [
     "I won two art awards in high school!",
     "I'm a self-taught artist!",
-    "My prefereed medium is digital art!",
-    "Watercolor is my new hobby!",
-    "Drawing calms my mind and brings me peace.",
+    "My preferred medium is digital art!",
+    "I have been crocheting for 3 years so far!",
+    "Mario Party is one of my favorite games to play!",
+    "Drawing calms my mind and brings me peace!",
     "I competed in cross country during high school!",
     "My dream destinations are Japan and Italy!",
+    "I hate spicy food!",
+    "My dog was born on Christmas Day!",
 ];
 
 const unluckyPhrases = [
@@ -171,9 +174,6 @@ function showChallengeSelection() {
 
     } else if (lastPickedId) {
 
-        // only swap out the card that was just played; keep the other
-        // one — UNLESS it's been sitting unplayed too long, in which
-        // case refresh it too so it can't camp there indefinitely
         const keptChallenge = currentPair.find((c) => c.id !== lastPickedId);
 
         const newPlayedCard = pickFreshChallenge([lastPickedId, keptChallenge.id]);

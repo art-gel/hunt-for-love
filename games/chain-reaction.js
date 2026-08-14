@@ -4,7 +4,7 @@ const CHAIN_MAX_HINTS = 6; // shared across the whole chain, not per-word
 const CHAIN_PUZZLES = [
     ["CARD", "SHARK", "TANK", "TOP", "SECRET", "SANTA"],
     ["FAST", "FOOD", "TRUCK", "STOP", "SIGN", "LANGUAGE"],
-    ["OPEN", "SEASAME", "STREET", "SMART", "COOKIE", "MONSTER"],
+    ["OPEN", "SESAME", "STREET", "SMART", "COOKIE", "MONSTER"],
     ["SLOW", "MOTION", "PICTURE", "PERFECT", "CRIME", "SCENE"],
     ["RAW", "VEGAN", "DIET", "SODA", "POP", "CULTURE"],
     ["COUNTRY", "MUSIC", "VIDEO", "GAME", "OVER", "BOARD"],
